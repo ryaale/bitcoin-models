@@ -1,4 +1,5 @@
-# Ridge Regression -> solution #2 multicollinearity
+# Bitcoin
+# Ridge Regression Model
 library(tidyverse)
 library(broom)
 library(glmnet)

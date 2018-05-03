@@ -1,7 +1,9 @@
 # Bitcoin 
 # Principle Component Regression Model
+data <- read.csv("bitcoin_data.csv")
 #------------------------------------------------------------------------------
-pca.data <- data[,2:6]
+# PCA -> Using princomp function
+pca.data <- data[,3:6]
 pca <- princomp(pca.data, cor=T)
 summary(pca, loadings=T)
 
@@ -16,15 +18,14 @@ barplot(pca$scores[,1])
 
 data$pca.pred <- predict(model) # predicted price
 # plot of pca vs price
-j <- as.data.frame(data) # convert to dataframe -> shouldn't used xts file :/
-plot_ly(j, x = index(data), y = j$pca.pred , name = 'pca', type = 'scatter', mode = 'lines') %>%
-  add_trace(x = index(data), y = j$btc.price, name = 'log(btc.price)', mode = 'lines')
+plot_ly(data, x = index(data), y = data$pca.pred , name = 'pca', type = 'scatter', mode = 'lines') %>%
+  add_trace(x = index(data), y = data$btc.price, name = 'log(btc.price)', mode = 'lines')
 
 #----------------------------------------------------------
-# Principle Component Analysis -> solution to multicollinearity (using pcr)
-train <- data["2014-01-01/2017-01-01", 1:6]
-y_test <- data["2017-01-01/", 1]
-test <- data["2017-01-01/", 1:6]
+# PCA -> Using pcr function
+train <- data["2014-01-01/2017-01-01", 2:7]
+y_test <- data["2017-01-01/", 3]
+test <- data["2017-01-01/", 2:7]
 
 pcr_model <- pcr(btc.price~., data = train, scale = TRUE, validation = "CV")
 summary(pcr_model)
